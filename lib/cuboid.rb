@@ -133,6 +133,12 @@ class Cuboid
       collided = true
     end
 
+    # TODO: implement container class uses DI on cuboids
+    #         use this to determine boundaries for cuboids
+    # if max_x > container.width
+    #   self.x = (x - (max_x - container.width))
+    # end
+
     collided
   end
 

@@ -96,7 +96,10 @@ describe Cuboid do
       @cube_x.rotate_x
       expect(@cube_x.min_y).to eq(0)
     end
-
   end
+
+  # TODO:
+  # test y rotation
+  # test z rotation
 
 end
