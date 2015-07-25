@@ -31,24 +31,6 @@ class Cuboid
     self
   end
 
-  def maybe_collide_wall
-    collided? = false
-    if min_x < 0
-      x += min_x
-      collided? = true
-    end
-    if min_y < 0
-      y += min_y
-      collided? = true
-    end
-    if min_z < 0
-      z += min_z
-      collided? = true
-    end
-
-    collided?
-  end
-
   ## assumes AABB
   def intersects?(other)
     min_x < other.max_x &&
@@ -65,11 +47,24 @@ class Cuboid
     self
   end
 
-  # rotate about z axis, 90 deg. returns true if wall collisions occurred
+  # rotate about axis, 90 deg. returns true if wall collisions occurred
   def rotate_z
     @width, @height = @height, @width
+
     maybe_collide_wall
   end
+  def rotate_x
+    @length, @height = @height, @length
+
+    maybe_collide_wall
+  end
+
+  def rotate_y
+    @width, @length = @length, @width
+
+    maybe_collide_wall
+  end
+
 
   # assumes origin at centroid
   def vertices
@@ -111,5 +106,34 @@ class Cuboid
   end
 
 
+  private
+
+  def x=(val)
+    @x = val
+  end
+  def y=(val)
+    @y = val
+  end
+  def z=(val)
+    @z = val
+  end
+
+  def maybe_collide_wall
+    collided = false
+    if min_x < 0
+      self.x = x - min_x
+      collided = true
+    end
+    if min_y < 0
+      self.y = y - min_y
+      collided = true
+    end
+    if min_z < 0
+      self.z = z - min_z
+      collided = true
+    end
+
+    collided
+  end
 
 end

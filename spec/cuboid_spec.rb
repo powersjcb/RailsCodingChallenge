@@ -80,4 +80,23 @@ describe Cuboid do
     end
   end
 
+  context '#rotate_x' do
+    before(:each) { @cube_x = subject.new({ height: 1.5, length: 2.5})}
+
+    it 'changes the perceived length and height values' do
+      @cube_x.rotate_x
+      expect([@cube_x.height, @cube_x.length]).to eq([2.5, 1.5])
+    end
+
+    it 'returns true if there is a collision' do
+      expect(@cube_x.rotate_x).to be true
+    end
+
+    it 'moves the origin when there is a collision' do
+      @cube_x.rotate_x
+      expect(@cube_x.min_y).to eq(0)
+    end
+
+  end
+
 end
