@@ -2,14 +2,14 @@
 class Cuboid
 
   UNIT_VERTICES =
-       [[ 1,  1,  1],
-        [-1,  1,  1],
-        [-1, -1,  1],
-        [-1, -1, -1],
-        [ 1, -1,  1],
-        [ 1, -1, -1],
-        [ 1,  1, -1],
-        [-1,  1, -1]]
+    [[ 1,  1,  1],
+    [-1,  1,  1],
+    [-1, -1,  1],
+    [-1, -1, -1],
+    [ 1, -1,  1],
+    [ 1, -1, -1],
+    [ 1,  1, -1],
+    [-1,  1, -1]]
 
   attr_reader :x, :y, :z, :height, :width, :length
 
@@ -26,13 +26,49 @@ class Cuboid
     @height = options[:height] # y axis
     @length = options[:length] # z axis
 
+    # maybe_collide_wall # to fix bogus initial conditions if needed
+
     self
+  end
+
+  def maybe_collide_wall
+    collided? = false
+    if min_x < 0
+      x += min_x
+      collided? = true
+    end
+    if min_y < 0
+      y += min_y
+      collided? = true
+    end
+    if min_z < 0
+      z += min_z
+      collided? = true
+    end
+
+    collided?
+  end
+
+  ## assumes AABB
+  def intersects?(other)
+    min_x < other.max_x &&
+    max_x > other.min_x &&
+    min_y < other.max_y &&
+    max_y > other.min_y &&
+    min_z < other.max_z &&
+    max_z > other.min_z
   end
 
   def move_to!(x, y, z)
     @x, @y, @z, = x, y, z
 
     self
+  end
+
+  # rotate about z axis, 90 deg. returns true if wall collisions occurred
+  def rotate_z
+    @width, @height = @height, @width
+    maybe_collide_wall
   end
 
   # assumes origin at centroid
@@ -46,16 +82,6 @@ class Cuboid
     end
 
     vertices
-  end
-
-  #returns true if the two cuboids intersect each other.  False otherwise.
-  def intersects?(other)
-    min_x < other.max_x &&
-    max_x > other.min_x &&
-    min_y < other.max_y &&
-    max_y > other.min_y &&
-    min_z < other.max_z &&
-    max_z > other.min_z
   end
 
 
